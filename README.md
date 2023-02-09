@@ -1,2 +1,2 @@
-# Bases du langage Csharp
+# Bases du langage C#
  Projet 2
