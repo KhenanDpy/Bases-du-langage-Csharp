@@ -10,15 +10,13 @@ using UnityEngine.UI;
 public class Pendu : MonoBehaviour
 {
 
-    [SerializeField]
+    /*[SerializeField]*/
     private string word;
+    public string[] words;
+    public Keyboard keyboard;
 
     int counter;
-
-    string chars;
-
     private string holes;
-
     char[] letters;
 
     public InputField input;
@@ -30,44 +28,50 @@ public class Pendu : MonoBehaviour
     public GameObject hanging;
     Image hangingSprite;
 
+    GameObject restartYes;
+    GameObject resartNo;
+
     bool ended;
 
-
-    void Init(bool gameStart)
+    private void Awake()
     {
+        restartYes = GameObject.Find("Restart(oui)");
+        resartNo = GameObject.Find("Restart(non)");
+    }
 
-        //    gameStart
-        if (gameStart)
-        {
-            hangingSprite = hanging.GetComponent<Image>();
-            counter = 8;
-            holes = "";
-            ended = false;
+    void Init()
+    {
+        restartYes.SetActive(false);
+        resartNo.SetActive(false);
+        
+        keyboard.Init();
+        var rand = new System.Random();
+        word = words[rand.Next(words.Length)];
+        hangingSprite = hanging.GetComponent<Image>();
+        counter = 8;
+        holes = "";
+        ended = false;
 
-            toGuess(word);
+        toGuess(word);
 
-            Debug.Log("Lancement pendu. Le mot à trouver est " + word + ".");
+        Debug.Log("Lancement pendu. Le mot à trouver est " + word + ".");
 
-            output.text = "Tentez de trouver le mot mystère";
-            life.text = $"Vie restante : {counter - 1}";
-            hangingSprite.sprite = hang[hang.Length - counter];
-        }
-
+        output.text = "Tentez de trouver le mot mystère";
+        //life.text = $"Vie restante : {counter - 1}";
+        hangingSprite.sprite = hang[hang.Length - counter];
     }
 
     // Start is called before the first frame update
     void Start()
     {
 
-        Init(true);
+        Init();
 
     }
 
 
     public void onValidate()
     {
-        Debug.Log("onValidate=" + input.text);
-
         // si la partie n'est pas finie, on limite l'entrée utilisateur
         if (!ended)
         {
@@ -75,7 +79,7 @@ public class Pendu : MonoBehaviour
         }
         else
         {// si on ne joue plus, on enlève les limitations
-            restart();
+            restart("");
         }
     }
 
@@ -101,7 +105,7 @@ public class Pendu : MonoBehaviour
     }
 
     // permet d'avoir l'emplacement (si elle existe) de la lettre entrée par l'utilisateur
-    private void replace(string guess)
+    public bool replace(string guess)
     {
         int i = 0;
         bool find = false;
@@ -122,8 +126,8 @@ public class Pendu : MonoBehaviour
         if (!find)
         {
             counter--;
-            Debug.Log($"vie restante : {counter - 1}");
-            life.text = $"Vie restante : {counter - 1}";
+            /*Debug.Log($"vie restante : {counter - 1}");
+            life.text = $"Vie restante : {counter - 1}";*/
             hangingSprite.sprite = hang[hang.Length - counter];
         }
         else
@@ -131,26 +135,32 @@ public class Pendu : MonoBehaviour
             holes = placed.ToString();
             wordToGuess.text = holes;
         }
+
+        return find;
     }
 
-    private void lose()
+    private void End(string state)
     {
+        if(state == "win")
+        {
+            output.text = "Victoire !\nVoulez-vous refaire une partie ?";
+        }
+        else if(state == "lose")
+        {
+            output.text = $"Perdu ! Le mot à trouver était {word}.\nVoulez-vous refaire une partie ?";
+        }
         ended = true;
-        Debug.Log("perdu");
-        output.text = "Perdu ! Voulez-vous refaire une partie ? oui / non";
-    }
-
-    private void win()
-    {
-        ended = true;
-        Debug.Log("victoire");
-        output.text = "Victoire ! Voulez-vous refaire une partie ? oui / non";
+        // On détruit l'ancien clavier
+        for (int i = 0; i < keyboard.keyboardParent.transform.childCount; i++)
+        {
+            Destroy(keyboard.keyboardParent.transform.GetChild(i).gameObject);
+        }
+        restartYes.SetActive(true);
+        resartNo.SetActive(true);
     }
 
     private void play()
     {
-        bool find = false;
-
         // si l'entrée utilisateur fait plus/moins qu'un caractère
         if (input.text.Length != 1)
         {
@@ -166,6 +176,13 @@ public class Pendu : MonoBehaviour
             input.text = "";
         }
 
+        CheckEnd();
+    }
+
+    public void CheckEnd()
+    {
+        bool find = false;
+     
         // on vérifie si on a gagné, si il n'y a plus de tiret, c'est gagné
         foreach (char _ in holes)
         {
@@ -176,29 +193,26 @@ public class Pendu : MonoBehaviour
         }
         if (!find)
         {
-            win();
+            End("win");
         }
-        
+
         // si plus de pv, on perd (ajusté directement par rapport au jeu)
         if (counter < 2)
         {
-            lose();
+            End("lose");
         }
-
-        Init(false); //je sais pas vraiment à quoi il sert (je le laisse parce que c'est pas moi qui l'ait mis)
     }
 
-    private void restart()
+    public void restart(string restartAnswer)
     {
-        if (input.text == "oui")
+        if (input.text == "oui" || restartAnswer == "oui")
         {
             input.text = "";
-            Init(true);
+            Init();
         }
-        else if (input.text == "non")
+        else if (input.text == "non" || restartAnswer == "non")
         {
             input.text = "";
-            Init(false);
             Application.Quit();
         }
         else
