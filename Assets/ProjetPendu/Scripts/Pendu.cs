@@ -9,16 +9,16 @@ using UnityEngine.UI;
 
 public class Pendu : MonoBehaviour
 {
+    public static Pendu instance;
 
-    /*[SerializeField]*/
-    private string word;
+    string word;
     public string[] words;
     public Keyboard keyboard;
     public AudioClip winSound;
     public AudioClip loseSound;
 
     int counter;
-    private string holes;
+    string holes;
     char[] letters;
 
     public InputField input;
@@ -37,8 +37,9 @@ public class Pendu : MonoBehaviour
 
     bool ended;
 
-    private void Awake()
+    void Awake()
     {
+        instance = this;
         restartYes = GameObject.Find("Restart(oui)");
         resartNo = GameObject.Find("Restart(non)");
         audio = GameObject.Find("audio");
@@ -58,12 +59,11 @@ public class Pendu : MonoBehaviour
         holes = "";
         ended = false;
 
-        toGuess(word);
+        ToGuess(word);
 
         Debug.Log("Lancement pendu. Le mot à trouver est " + word + ".");
 
         output.text = "Tentez de trouver le mot mystère";
-        //life.text = $"Vie restante : {counter - 1}";
         hangingSprite.sprite = hang[hang.Length - counter];
     }
 
@@ -74,21 +74,21 @@ public class Pendu : MonoBehaviour
     }
 
 
-    public void onValidate()
+    public void OnValidate()
     {
         // si la partie n'est pas finie, on limite l'entrée utilisateur
         if (!ended)
         {
-            play();
+            Play();
         }
         else
         {// si on ne joue plus, on enlève les limitations
-            restart("");
+            Restart("");
         }
     }
 
     // permet les trous pour faire deviner un mot
-    private void toGuess(string word)
+    void ToGuess(string word)
     {
 
         letters = new char[word.Length];
@@ -109,7 +109,7 @@ public class Pendu : MonoBehaviour
     }
 
     // permet d'avoir l'emplacement (si elle existe) de la lettre entrée par l'utilisateur
-    public bool replace(string guess)
+    public bool OnKeyPressed(string guess)
     {
         int i = 0;
         bool find = false;
@@ -130,8 +130,6 @@ public class Pendu : MonoBehaviour
         if (!find)
         {
             counter--;
-            /*Debug.Log($"vie restante : {counter - 1}");
-            life.text = $"Vie restante : {counter - 1}";*/
             hangingSprite.sprite = hang[hang.Length - counter];
         }
         else
@@ -143,7 +141,7 @@ public class Pendu : MonoBehaviour
         return find;
     }
 
-    private void End(string state)
+    void End(string state)
     {
         if(state == "win")
         {
@@ -167,7 +165,7 @@ public class Pendu : MonoBehaviour
         resartNo.SetActive(true);
     }
 
-    private void play()
+    void Play()
     {
         // si l'entrée utilisateur fait plus/moins qu'un caractère
         if (input.text.Length != 1)
@@ -179,7 +177,7 @@ public class Pendu : MonoBehaviour
         // sinon on remplace (si possible) les pointillés par le caractère choisi
         else
         {
-            replace(input.text);
+            OnKeyPressed(input.text);
             output.text = "Tentez de trouver le mot mystère";
             input.text = "";
         }
@@ -211,7 +209,7 @@ public class Pendu : MonoBehaviour
         }
     }
 
-    public void restart(string restartAnswer)
+    public void Restart(string restartAnswer)
     {
         if (input.text == "oui" || restartAnswer == "oui")
         {

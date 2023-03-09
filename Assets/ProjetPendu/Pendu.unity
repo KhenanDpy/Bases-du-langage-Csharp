@@ -211,7 +211,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   keyPrefab: {fileID: 2190687917620177311, guid: 60632ca797981e94baad2a096ed71015, type: 3}
-  pendu: {fileID: 71043001}
   startPos: {fileID: 1784688560}
   sprites:
   - {fileID: 1063438215, guid: a8656edde77df2b4fa2762e080c80c7d, type: 3}
@@ -769,10 +768,10 @@ RectTransform:
   m_Father: {fileID: 946926807}
   m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 294.3, y: 224.3}
-  m_SizeDelta: {x: 160, y: 30}
+  m_AnchorMin: {x: 0.71500003, y: 0.90646666}
+  m_AnchorMax: {x: 0.8108771, y: 0.92800003}
+  m_AnchoredPosition: {x: 34.4, y: -5.699997}
+  m_SizeDelta: {x: 65, y: 18}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &434280910
 MonoBehaviour:
@@ -2500,10 +2499,10 @@ RectTransform:
   m_Father: {fileID: 946926807}
   m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 287.4, y: 248}
-  m_SizeDelta: {x: 160, y: 30}
+  m_AnchorMin: {x: 0.708, y: 0.94065833}
+  m_AnchorMax: {x: 0.8108771, y: 0.97838336}
+  m_AnchoredPosition: {x: 32.899994, y: -5.5}
+  m_SizeDelta: {x: 61, y: 9}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1576904775
 MonoBehaviour:
@@ -3031,7 +3030,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.823, y: 0.94065833}
   m_AnchorMax: {x: 0.9866802, y: 0.97838336}
-  m_AnchoredPosition: {x: -0.1000061, y: 0}
+  m_AnchoredPosition: {x: -0.10003662, y: 0}
   m_SizeDelta: {x: 1, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1937779868
@@ -3304,7 +3303,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.823, y: 0.89923334}
   m_AnchorMax: {x: 0.9866802, y: 0.93342507}
-  m_AnchoredPosition: {x: -0.3999939, y: 0}
+  m_AnchoredPosition: {x: -0.39996338, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1953342402
@@ -3454,7 +3453,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Output
+  m_Text: Veuillez entrer une lettre
 --- !u!222 &1953976033
 CanvasRenderer:
   m_ObjectHideFlags: 0

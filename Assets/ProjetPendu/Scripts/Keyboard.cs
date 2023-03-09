@@ -7,16 +7,15 @@ using UnityEngine.UI;
 
 public class Keyboard : MonoBehaviour
 {
-    public Keys keyPrefab;
-    public Pendu pendu;
+    public Key keyPrefab;
 
     public Transform startPos;
     public Sprite[] sprites;
-    private string alphabet = "abcdefghijklmnopqrstuvwxyz";
+    string alphabet = "abcdefghijklmnopqrstuvwxyz";
 
     public GameObject keyboardParent;
 
-    private void Awake()
+    void Awake()
     {
         keyboardParent = GameObject.Find("keyboardPos"); // On cherche l'objet keyboardPos
     }
@@ -41,20 +40,13 @@ public class Keyboard : MonoBehaviour
     }
     
     // On créer une touche
-    private void CreateKey(Vector3 pos, char v, Sprite sprite)
+    void CreateKey(Vector3 pos, char v, Sprite sprite)
     {
-        Keys key = Instantiate(keyPrefab, pos, Quaternion.identity);
+        Key key = Instantiate(keyPrefab, pos, Quaternion.identity);
         key.transform.parent = keyboardParent.transform;            // On met les touches en tant qu'enfants de keyboardPos
         Image image = key.GetComponent<Image>();
         key.name = "" + v;
         image.sprite = sprite;
-        key.pendu = pendu;
     }
-
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
+    
 }

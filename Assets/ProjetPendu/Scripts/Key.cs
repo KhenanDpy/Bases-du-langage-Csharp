@@ -2,11 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-// static UnityEditor.PlayerSettings; ==> Celà créer une erreur au moment du build, je ne sais pas à quoi ça sert et je me souviens pas l'avoir mis.
 
-public class Keys : MonoBehaviour
+public class Key : MonoBehaviour
 {
-    public Pendu pendu;
     private Button _btn;
 
     private void Awake()
@@ -22,8 +20,8 @@ public class Keys : MonoBehaviour
     void TaskOnClick()
     {
         Debug.Log("Vous avez cliqué sur le bouton " + name);
-        bool retour = pendu.replace(name);
-        pendu.CheckEnd();
+        bool retour = Pendu.instance.OnKeyPressed(name);
+        Pendu.instance.CheckEnd();
         var colorBlock = _btn.colors;
         if (retour)
         {
@@ -33,6 +31,7 @@ public class Keys : MonoBehaviour
         {
             colorBlock.disabledColor = Color.red;
         }
+        _btn.colors = colorBlock;
         _btn.interactable = false;
 
     }
