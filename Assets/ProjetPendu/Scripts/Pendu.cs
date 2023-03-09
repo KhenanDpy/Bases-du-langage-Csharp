@@ -14,6 +14,8 @@ public class Pendu : MonoBehaviour
     private string word;
     public string[] words;
     public Keyboard keyboard;
+    public AudioClip winSound;
+    public AudioClip loseSound;
 
     int counter;
     private string holes;
@@ -30,6 +32,8 @@ public class Pendu : MonoBehaviour
 
     GameObject restartYes;
     GameObject resartNo;
+    GameObject audio;
+    AudioSource m_audio;
 
     bool ended;
 
@@ -37,6 +41,8 @@ public class Pendu : MonoBehaviour
     {
         restartYes = GameObject.Find("Restart(oui)");
         resartNo = GameObject.Find("Restart(non)");
+        audio = GameObject.Find("audio");
+        m_audio = audio.GetComponent<AudioSource>();
     }
 
     void Init()
@@ -64,9 +70,7 @@ public class Pendu : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
         Init();
-
     }
 
 
@@ -143,12 +147,16 @@ public class Pendu : MonoBehaviour
     {
         if(state == "win")
         {
+            m_audio.clip = winSound;
             output.text = "Victoire !\nVoulez-vous refaire une partie ?";
         }
         else if(state == "lose")
         {
+            m_audio.clip = loseSound;
             output.text = $"Perdu ! Le mot à trouver était {word}.\nVoulez-vous refaire une partie ?";
         }
+
+        m_audio.Play();
         ended = true;
         // On détruit l'ancien clavier
         for (int i = 0; i < keyboard.keyboardParent.transform.childCount; i++)

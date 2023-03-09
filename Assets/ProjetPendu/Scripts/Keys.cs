@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using static UnityEditor.PlayerSettings;
+// static UnityEditor.PlayerSettings; ==> Celà créer une erreur au moment du build, je ne sais pas à quoi ça sert et je me souviens pas l'avoir mis.
 
 public class Keys : MonoBehaviour
 {
