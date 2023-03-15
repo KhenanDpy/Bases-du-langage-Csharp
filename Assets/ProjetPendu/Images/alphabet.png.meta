@@ -192,9 +192,9 @@ TextureImporter:
       name: alphabet_4
       rect:
         serializedVersion: 2
-        x: 357
+        x: 350
         y: 287
-        width: 45
+        width: 55
         height: 73
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -213,9 +213,9 @@ TextureImporter:
       name: alphabet_5
       rect:
         serializedVersion: 2
-        x: 436
+        x: 429
         y: 286
-        width: 44
+        width: 55
         height: 73
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -297,9 +297,9 @@ TextureImporter:
       name: alphabet_9
       rect:
         serializedVersion: 2
-        x: 192
+        x: 187
         y: 200
-        width: 43
+        width: 55
         height: 76
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -339,9 +339,9 @@ TextureImporter:
       name: alphabet_11
       rect:
         serializedVersion: 2
-        x: 357
+        x: 348
         y: 202
-        width: 44
+        width: 55
         height: 73
       alignment: 0
       pivot: {x: 0.5, y: 0.5}

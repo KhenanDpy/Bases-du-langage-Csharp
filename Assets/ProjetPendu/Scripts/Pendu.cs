@@ -1,7 +1,4 @@
-using System;
 using System.Text;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,6 +7,8 @@ using UnityEngine.UI;
 public class Pendu : MonoBehaviour
 {
     public static Pendu instance;
+
+    public bool testMod;
 
     string word;
     public string[] words;
@@ -21,50 +20,51 @@ public class Pendu : MonoBehaviour
     string holes;
     char[] letters;
 
-    public InputField input;
     public Text output;
     public Text wordToGuess;
-    public Text life;
 
     public Sprite[] hang;
     public GameObject hanging;
-    Image hangingSprite;
-
+    
     GameObject restartYes;
     GameObject resartNo;
-    GameObject audio;
+    GameObject endAudio;
     AudioSource m_audio;
+    Image hangingSprite;
 
-    bool ended;
-
+    // A la création du pendu :
     void Awake()
     {
-        instance = this;
-        restartYes = GameObject.Find("Restart(oui)");
-        resartNo = GameObject.Find("Restart(non)");
-        audio = GameObject.Find("audio");
-        m_audio = audio.GetComponent<AudioSource>();
+        instance = this; // On crée une instance de pendu
+        restartYes = GameObject.Find("Restart(oui)"); // On associe le bouton restartYes
+        resartNo = GameObject.Find("Restart(non)"); // On associe le bouton resartNo
+        endAudio = GameObject.Find("audio"); // On associe l'audio
+        m_audio = endAudio.GetComponent<AudioSource>(); // On crée une variable pour changer l'audio associé
+        hangingSprite = hanging.GetComponent<Image>(); // On crée une variable pour changer l'image du pendu
     }
 
+    // On initialise la partie
     void Init()
     {
+        // On cache les boutons "oui" et "non"
         restartYes.SetActive(false);
         resartNo.SetActive(false);
         
-        keyboard.Init();
-        var rand = new System.Random();
-        word = words[rand.Next(words.Length)];
-        hangingSprite = hanging.GetComponent<Image>();
-        counter = 8;
-        holes = "";
-        ended = false;
+        keyboard.Init(); // On crée le clavier
+        var rand = new System.Random(); // On crée un nombre aléatoire
+        word = words[rand.Next(words.Length)]; // On pioche un mot aléatoirement parmi une liste de mot
+        counter = 11; // On met la vie au max
+        holes = ""; // On crée le mot à trou qui s'affiche et qui correspond au mot que l'on doit deviner
 
-        ToGuess(word);
+        ToGuess(word); // On met à jour "holes" pour que l'on voit un nombre de tiret égal au nombre de lettre du mot à deviner
 
-        Debug.Log("Lancement pendu. Le mot à trouver est " + word + ".");
+        if (testMod)
+        {
+            Debug.Log("Lancement pendu. Le mot à trouver est " + word + ".");
+        }
 
         output.text = "Tentez de trouver le mot mystère";
-        hangingSprite.sprite = hang[hang.Length - counter];
+        hangingSprite.sprite = hang[hang.Length - counter]; // On associe la bonne image à l'état de base du pendu
     }
 
     // Start is called before the first frame update
@@ -73,60 +73,47 @@ public class Pendu : MonoBehaviour
         Init();
     }
 
-
-    public void OnValidate()
-    {
-        // si la partie n'est pas finie, on limite l'entrée utilisateur
-        if (!ended)
-        {
-            Play();
-        }
-        else
-        {// si on ne joue plus, on enlève les limitations
-            Restart("");
-        }
-    }
-
-    // permet les trous pour faire deviner un mot
+    // Permet de créer le mot à trou pour faire deviner un mot
     void ToGuess(string word)
     {
 
-        letters = new char[word.Length];
+        letters = new char[word.Length]; // On crée un tableau de caractères de la taille de notre mot
 
-
+        // A chaque lettre de notre mot, on associe cette dernière à une case de notre tableau de caractères
         for (int i = 0; i < word.Length; i++)
         {
             letters[i] = word[i];
         }
 
+        // Pour chaque caractères dans notre tableau de caractères, on écrit "_ "
         foreach (char letter in letters)
         {
             holes += "_ ";
         }
 
-        wordToGuess.text = holes;
+        wordToGuess.text = holes; // On affiche "holes"
 
     }
 
-    // permet d'avoir l'emplacement (si elle existe) de la lettre entrée par l'utilisateur
+    // Permet de savoir si une lettre est bien dans le mot ou pas
     public bool OnKeyPressed(string guess)
     {
         int i = 0;
         bool find = false;
-        StringBuilder placed = new StringBuilder(holes);
+        StringBuilder placed = new StringBuilder(holes); // Permet de créer une copie de notre chaîne de caractères pour la modifier
 
-        // cherche dans le mot à deviner si la lettre entrée existe
+        // On cherche dans le mot à deviner si la lettre entrée existe
         foreach (char letter in letters)
         {
             if (letter.ToString() == guess)
             {
-                // si oui, on remplace le tiret par la lettre
+                // Si oui, on remplace le tiret par la lettre
                 placed[i * 2] = letter;
                 find = true;
             }
             i++;
         }
-        // si aucune lettre n'est trouvée, on perd un pv
+        // Si aucune lettre n'est trouvée, on perd un pv
         if (!find)
         {
             counter--;
@@ -134,62 +121,48 @@ public class Pendu : MonoBehaviour
         }
         else
         {
-            holes = placed.ToString();
-            wordToGuess.text = holes;
+            holes = placed.ToString(); // On actualise la chaîne de caractère par rapport à la copie pour la modifier
+            wordToGuess.text = holes; // On affiche la chaîne de caractère
         }
 
-        return find;
+        return find; // On dit si on a trouvé ou non la lettre
     }
 
+    // Si la partie est finie :
     void End(string state)
     {
+        // Si c'est gagné, on associe un son de victoire et on demande si on rejoue
         if(state == "win")
         {
             m_audio.clip = winSound;
             output.text = "Victoire !\nVoulez-vous refaire une partie ?";
         }
-        else if(state == "lose")
+        // Si c'est perdu, on associe un son de défaite, on affiche le mot qu'il fallait trouver et on demande si on rejoue
+        else if (state == "lose")
         {
             m_audio.clip = loseSound;
             output.text = $"Perdu ! Le mot à trouver était {word}.\nVoulez-vous refaire une partie ?";
         }
 
-        m_audio.Play();
-        ended = true;
+        m_audio.Play(); // On joue le son associé précédemment
+
         // On détruit l'ancien clavier
         for (int i = 0; i < keyboard.keyboardParent.transform.childCount; i++)
         {
             Destroy(keyboard.keyboardParent.transform.GetChild(i).gameObject);
         }
+
+        // On affiche les boutons "oui" et "non"
         restartYes.SetActive(true);
         resartNo.SetActive(true);
     }
 
-    void Play()
-    {
-        // si l'entrée utilisateur fait plus/moins qu'un caractère
-        if (input.text.Length != 1)
-        {
-            output.text = "Veuillez entrer une lettre";
-            input.text = "";
-            return;
-        }
-        // sinon on remplace (si possible) les pointillés par le caractère choisi
-        else
-        {
-            OnKeyPressed(input.text);
-            output.text = "Tentez de trouver le mot mystère";
-            input.text = "";
-        }
-
-        CheckEnd();
-    }
-
+    // On vérifie si la partie est finie
     public void CheckEnd()
     {
         bool find = false;
      
-        // on vérifie si on a gagné, si il n'y a plus de tiret, c'est gagné
+        // On cherche si il y a des tirets
         foreach (char _ in holes)
         {
             if (_ == '_')
@@ -197,34 +170,31 @@ public class Pendu : MonoBehaviour
                 find = true;
             }
         }
+        // Si il n'y a plus de tiret, c'est gagné
         if (!find)
         {
             End("win");
         }
 
-        // si plus de pv, on perd (ajusté directement par rapport au jeu)
+        // Si on a plus de pv, on perd (ajusté directement par rapport au jeu)
         if (counter < 2)
         {
             End("lose");
         }
     }
 
+    // Pour relancer la partie ou quitter le jeu
     public void Restart(string restartAnswer)
     {
-        if (input.text == "oui" || restartAnswer == "oui")
+        // Si oui, on recommence une partie
+        if (restartAnswer == "oui")
         {
-            input.text = "";
             Init();
         }
-        else if (input.text == "non" || restartAnswer == "non")
+        // Si non, on quitte le jeu
+        else if (restartAnswer == "non")
         {
-            input.text = "";
             Application.Quit();
-        }
-        else
-        {
-            input.text = "";
-            output.text = "Voulez-vous refaire une partie ? oui / non";
         }
     }
 }

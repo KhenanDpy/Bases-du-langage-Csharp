@@ -1,7 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -30,7 +26,7 @@ public class Keyboard : MonoBehaviour
             CreateKey(pos, alphabet[i], sprites[i]);
 
             pos += Vector3.right * 40f;
-            if (i == 12)
+            if (i == 12) // On change de ligne
             {
                 pos = startPos.position;
                 pos += Vector3.down * 60f;
@@ -39,14 +35,14 @@ public class Keyboard : MonoBehaviour
         }
     }
     
-    // On créer une touche
+    // On crée une touche (avec une position, un caractère et un sprite)
     void CreateKey(Vector3 pos, char v, Sprite sprite)
     {
         Key key = Instantiate(keyPrefab, pos, Quaternion.identity);
-        key.transform.parent = keyboardParent.transform;            // On met les touches en tant qu'enfants de keyboardPos
-        Image image = key.GetComponent<Image>();
-        key.name = "" + v;
-        image.sprite = sprite;
+        key.transform.SetParent(keyboardParent.transform, true); // On met les touches en tant qu'enfants de keyboardPos
+        Image image = key.GetComponent<Image>(); // On lui associe une image
+        key.name = "" + v; // On lui donne un nom
+        image.sprite = sprite; // On fait en sorte que l'image associée soit le sprite passé en paramètre
     }
     
 }
