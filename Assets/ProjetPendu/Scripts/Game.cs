@@ -4,9 +4,9 @@ using UnityEngine.UI;
 
 
 
-public class Pendu : MonoBehaviour
+public class Game : MonoBehaviour
 {
-    public static Pendu instance;
+    public static Game instance;
 
     public bool testMod;
 
@@ -35,7 +35,7 @@ public class Pendu : MonoBehaviour
     // A la création du pendu :
     void Awake()
     {
-        instance = this; // On crée une instance de pendu
+        instance = this; // On crée une instance de game
         restartYes = GameObject.Find("Restart(oui)"); // On associe le bouton restartYes
         resartNo = GameObject.Find("Restart(non)"); // On associe le bouton resartNo
         endAudio = GameObject.Find("audio"); // On associe l'audio

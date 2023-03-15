@@ -19,8 +19,8 @@ public class Key : MonoBehaviour
 
     void TaskOnClick()
     {
-        bool retour = Pendu.instance.OnKeyPressed(name); // On vérifie si, quand on appuie sur la touche, la lettre en question est dans le mot
-        Pendu.instance.CheckEnd();
+        bool retour = Game.instance.OnKeyPressed(name); // On vérifie si, quand on appuie sur la touche, la lettre en question est dans le mot
+        Game.instance.CheckEnd();
         var colorBlock = _btn.colors; // On copie la propriété "couleur" du bouton pour la modifier.
         // Si oui, on change la couleur de la touche en vert
         if (retour)
